@@ -1,0 +1,63 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title color="primary">Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true" class="ion-padding">
+ <h1 class="ion-text-center"> RegistrApp</h1>
+  <p class="ion-text-center">bienvenido al login</p>
+  <ion-card>
+    <ion-card-header>
+      <ion-title>Iniciar Sesión</ion-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form [formGroup]="loginForm">
+        <ion-item lines="full">
+          <ion-label position="floating">Usuario</ion-label>
+          <ion-input formControlName="usuario" type="text"></ion-input>
+        </ion-item>
+        <ion-item lines="full">
+          <ion-label position="floating">Contraseña</ion-label>
+          <ion-input formControlName="password" type="password"></ion-input>
+        </ion-item>
+        <br>
+        <p class="ion-text-right ion-margin-horizontal">
+          <ion-text id="forgot-password" color="medium">olvidaste la contraseña?</ion-text>
+        </p>
+        <ion-row>
+          <br>
+          <ion-col class="ion-text-center">
+            <ion-button expand="full" (click)="ingresar()">Ingresar</ion-button>
+            
+            
+          </ion-col>
+        </ion-row>
+      </form>
+     
+    </ion-card-content>
+  </ion-card>
+  <ion-button expand="full" (click)="navigateToregistro()">Crear una cuenta gratis</ion-button>
+  <p class="ion-text-center">
+    <ion-icon name="logo-facebook" color="tertiary"></ion-icon>
+    <ion-icon name="logo-twitter" color="secondary"></ion-icon>
+    <ion-icon name="logo-google" color="danger"></ion-icon>
+  </p>
+
+
+  <ion-modal
+  #forgot_pwd_modal
+  trigger="forgot-password"
+  cssClass="inline_modal"
+  (ionModalDidDismiss)="reset($event)"
+  [breakpoints]="[0.1, 0.5, 0.9]"
+  [initialBreakpoint]="0.5">
+  <ng-template>
+    <app-reset-password></app-reset-password>
+  </ng-template>
+  </ion-modal>
+
+  </ion-content>
+
+
