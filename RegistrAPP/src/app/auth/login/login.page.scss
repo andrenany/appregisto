@@ -13,3 +13,42 @@ p {
 ion-button {
     margin: 5vh 0;
 }
+/* Contenedor del modal */
+.modal {
+    display: none; /* Oculta el modal por defecto */
+    position: fixed; /* Posiciona el modal de manera fija en la pantalla */
+    z-index: 1000; /* Asegúrate de que el modal esté encima de otros elementos */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Permite el desplazamiento si el contenido es demasiado largo */
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+  }
+  
+  /* Contenedor del contenido del modal */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* Centra el modal horizontal y verticalmente */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Ancho del modal */
+    max-width: 500px; /* Ancho máximo del modal */
+    border-radius: 8px; /* Bordes redondeados */
+  }
+  
+  /* Botón de cerrar */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  

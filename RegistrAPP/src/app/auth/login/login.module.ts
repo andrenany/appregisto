@@ -8,6 +8,7 @@ import { LoginPageRoutingModule } from './login-routing.module';
 
 import { LoginPage } from './login.page';
 import { ResetPasswordComponent } from '../reset-password/reset-password.component';
+import { EstadoService } from '../../servicios/estado.service';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { ResetPasswordComponent } from '../reset-password/reset-password.compone
     
     
   ],
-  declarations: [LoginPage,ResetPasswordComponent]
+  declarations: [LoginPage,ResetPasswordComponent],  providers: [EstadoService]
+
 })
 export class LoginPageModule {}
