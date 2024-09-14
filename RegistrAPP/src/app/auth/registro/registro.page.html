@@ -1,11 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title color="primary">Registro</ion-title>
+    <ion-title color="primary" class="header-title">Registro</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-card>
+  <ion-card class="card">
     <ion-card-header class="ion-text-center">
       <ion-title>Crear Usuario</ion-title>
     </ion-card-header>
@@ -20,20 +20,19 @@
           <ion-input formControlName="password" type="password"></ion-input>
         </ion-item>
         <ion-item lines="full">
-          <ion-label position="floating">Contraseña</ion-label>
+          <ion-label position="floating">Confirmar Contraseña</ion-label>
           <ion-input formControlName="confirmacionPassword" type="password"></ion-input>
         </ion-item>
         <ion-row>
           <ion-col>
             <br>
-            <ion-button expand="full" (click)="guardar()">Registrarse</ion-button>
+            <ion-button expand="full" class="register-button" (click)="guardar()">Registrarse</ion-button>
           </ion-col>
         </ion-row>
       </form>
     </ion-card-content>
   </ion-card>
 </ion-content>
-
 
 <ion-footer>
   <ion-toolbar>
@@ -51,8 +50,13 @@
           <ion-badge *ngIf="contador > 0">{{ contador }}</ion-badge>
           <ion-label>I love it</ion-label>
         </ion-tab-button>
+        
+        <!-- Botón de escanear QR -->
+        <ion-tab-button tab="scanner" (click)="openScanner()">
+          <ion-icon name="qr-code-outline"></ion-icon>
+          <ion-label>Escanear</ion-label>
+        </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
   </ion-toolbar>
 </ion-footer>
-

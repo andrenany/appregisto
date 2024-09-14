@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';//importamos el modulo para trabajar rutas de angular
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { AlertController } from '@ionic/angular';
 import { EstadoService } from '../../servicios/estado.service';
-
 
 @Component({
   selector: 'app-registro',
@@ -12,10 +11,8 @@ import { EstadoService } from '../../servicios/estado.service';
 })
 
 export class RegistroPage implements OnInit {
-  
-  // Declaramos variable
   registroForm: FormGroup;
-  contador: number = 0; // Variable para el contador
+  contador: number = 0;
 
   constructor(
     private estadoService: EstadoService, 
@@ -30,16 +27,8 @@ export class RegistroPage implements OnInit {
     });
   }
 
-  navigateTologin() {
-    this.router.navigate(['/login']); // Navegamos hacia la página del login
-    this.estadoService.reiniciar(); 
-  }
-
   ngOnInit() {
-    // Mensaje de consola para depuración
     console.log('ngOnInit el componente se ha inicializado');
-    
-    // Suscribirse al observable para recibir actualizaciones de la variable
     this.estadoService.contadorActual.subscribe(valor => {
       this.contador = valor;
       console.log('ngOnInit Contador Actualizado', this.contador);
@@ -88,14 +77,12 @@ export class RegistroPage implements OnInit {
     };
     localStorage.setItem('usuario', JSON.stringify(usuario));
 
-    // Mostrar mensaje de éxito antes de navegar
     const successAlert = await this.alertController.create({
       header: 'Cuenta creada',
       message: 'Tu cuenta fue creada con éxito.',
       buttons: [{
         text: 'Aceptar',
         handler: () => {
-          // Navegamos a la página de login después de que el usuario cierre el alerta
           this.router.navigate(['/login']);
           this.estadoService.reiniciar();
         }
@@ -105,7 +92,6 @@ export class RegistroPage implements OnInit {
     await successAlert.present();
   }
 
-  // Funciones para obtener mensajes de error
   getUsuarioErrorMessage() {
     const usuarioControl = this.registroForm.controls['usuario'];
     if (usuarioControl.errors?.['required']) {
@@ -145,9 +131,18 @@ export class RegistroPage implements OnInit {
     return 'Error desconocido en el campo de confirmación de contraseña.';
   }
 
-  // Incrementar contador
   incrementarContador() {
     this.estadoService.incrementar();
   }
-}
 
+  navigateTologin() {
+    this.router.navigate(['/login']);
+    this.estadoService.reiniciar();
+  }
+
+  // Método para abrir el escáner QR
+  openScanner() {
+    // Implementar la lógica del escáner QR aquí
+    console.log('Escáner QR abierto');
+  }
+}
