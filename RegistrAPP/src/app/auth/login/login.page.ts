@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router'; // Importamos el módulo para trabajar rutas de Angular
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular'; // Se añadió ModalController para controlar los modales
 import { EstadoService } from '../../servicios/estado.service';
+import { ResetPasswordComponent } from '../reset-password/reset-password.component'; // Se añadió para el modal de reseteo de contraseña
 
 @Component({
   selector: 'app-login',
@@ -13,94 +14,66 @@ export class LoginPage implements OnInit {
   loginForm: FormGroup;
 
   constructor(
-    private estadoService: EstadoService, 
-    public fb: FormBuilder, 
-    private router: Router, 
-    public alertController: AlertController
+    private estadoService: EstadoService,
+    public fb: FormBuilder,
+    private router: Router,
+    public alertController: AlertController,
+    private modalController: ModalController // Controlador de modal para abrir un modal en la UI
   ) {
     this.loginForm = this.fb.group({
       'usuario': new FormControl("", [Validators.required, Validators.minLength(3), Validators.maxLength(8)]),
-      'password': new FormControl("", [Validators.required, Validators.pattern(/^\d{4}$/)])
+      'password': new FormControl("", [Validators.required, Validators.pattern(/^\d{4}$/)]),
     });
   }
 
   ngOnInit(): void {}
 
-  // Ir a crear cuenta
+  // Función para navegar hacia la página de registro (interacción de navegación en la UI)
   navigateToregistro() {
-    this.router.navigate(['/registro']); // Navegamos hacia la página de registro
-    this.estadoService.reiniciar(); 
+    this.router.navigate(['/registro']);
+    this.estadoService.reiniciar();
   }
 
+  // Función para ingresar (interacción que muestra alertas en la UI)
   async ingresar() {
-    if (this.loginForm.invalid) {
-      const errors = this.loginForm.controls;
+    if (this.loginForm.valid) {
+      const f = this.loginForm.value;
+      const usuarioString = localStorage.getItem('usuario');
 
-      if (errors['usuario'].errors) {
-        const alert = await this.alertController.create({
-          header: 'Error en Usuario',
-          message: this.getUsuarioErrorMessage(),
-          buttons: ['Aceptar']
-        });
-        await alert.present();
+      if (!usuarioString) {
+        await this.presentAlert('Error', 'No hay usuarios registrados'); // Visualización de alerta
         return;
       }
 
-      if (errors['password'].errors) {
-        const alert = await this.alertController.create({
-          header: 'Error en Contraseña',
-          message: this.getPasswordErrorMessage(),
-          buttons: ['Aceptar']
-        });
-        await alert.present();
-        return;
+      const usuario = JSON.parse(usuarioString);
+
+      if (usuario.usuario === f.usuario && usuario.password === f.password) {
+        this.router.navigate(['/home']); // Navegación a la página Home (interacción visual)
+        this.estadoService.reiniciar();
+      } else {
+        await this.presentAlert('Datos incorrectos', 'Nombre de usuario o contraseña incorrectos'); // Visualización de alerta
       }
-    }
-
-    const f = this.loginForm.value;
-    const usuarioString = localStorage.getItem('usuario');
-    const usuario = JSON.parse(usuarioString!); // Usa esto solo si estás seguro de que `usuarioString` no es `null`
-
-    if (usuario && usuario.usuario === f.usuario && usuario.password === f.password) {
-      this.router.navigate(['/home']); // Navegamos hacia la página principal
-      this.estadoService.reiniciar();
     } else {
-      const alert = await this.alertController.create({
-        header: 'Datos Incorrectos',
-        message: 'El nombre de usuario o la contraseña son incorrectos.',
-        buttons: ['Aceptar']
-      });
-      await alert.present();
+      await this.presentAlert('Formulario inválido', 'Por favor, completa todos los campos correctamente'); // Visualización de alerta
     }
   }
 
-  // Funciones para obtener mensajes de error
-  getUsuarioErrorMessage() {
-    const usuarioControl = this.loginForm.controls['usuario'];
-    if (usuarioControl.errors?.['required']) {
-      return 'El campo de usuario es obligatorio.';
-    }
-    if (usuarioControl.errors?.['minlength']) {
-      return 'El usuario debe tener al menos 3 caracteres.';
-    }
-    if (usuarioControl.errors?.['maxlength']) {
-      return 'El usuario no puede tener más de 8 caracteres.';
-    }
-    return 'Error desconocido en el campo de usuario.';
+  // Función para mostrar una alerta visual
+  async presentAlert(header: string, message: string) {
+    const alert = await this.alertController.create({
+      header: header,
+      message: message,
+      buttons: ['Aceptar']
+    });
+
+    await alert.present();
   }
 
-  getPasswordErrorMessage() {
-    const passwordControl = this.loginForm.controls['password'];
-    if (passwordControl.errors?.['required']) {
-      return 'La contraseña es obligatoria.';
-    }
-    if (passwordControl.errors?.['pattern']) {
-      return 'La contraseña debe contener exactamente 4 dígitos.';
-    }
-    return 'Error desconocido en el campo de contraseña.';
-  }
-
-  reset(event: any) {
-    // Implementa la lógica de reseteo aquí
+  // Función para abrir un modal de reseteo de contraseña (interacción visual)
+  async openResetPassword() {
+    const modal = await this.modalController.create({
+      component: ResetPasswordComponent // Componente que se mostrará en el modal
+    });
+    return await modal.present();
   }
 }
