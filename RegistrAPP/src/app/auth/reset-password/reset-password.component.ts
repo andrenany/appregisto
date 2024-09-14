@@ -53,6 +53,11 @@ export class ResetPasswordComponent implements OnInit {
     }
   }
 
+  navigateTologin() {
+    this.router.navigate(['/login']); // Navegamos hacia la página del login
+    
+  }
+
   async guardarNuevaPassword() {
     const f = this.resetForm.value;
 
